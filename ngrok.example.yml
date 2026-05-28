@@ -1,0 +1,14 @@
+# Paid ngrok — merge into %LOCALAPPDATA%\ngrok\ngrok.yml (keep your authtoken).
+# Start: ngrok start all-exam-success nextgen
+
+version: "3"
+
+endpoints:
+  - name: all-exam-success
+    url: https://unclean-meteorologically-lucca.ngrok-free.dev
+    upstream:
+      url: http://localhost:3000
+  - name: nextgen
+    url: https://nextgen.ngrok-free.dev
+    upstream:
+      url: http://localhost:5175
