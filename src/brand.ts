@@ -13,7 +13,7 @@ export const brand = {
     'NextGen Learning Technologies is a licensed IT-enabled services and Educational Consultancy company developing smart digital platforms for education, career preparation, software services and social-impact solutions.',
 
   /**
-   * Self-hosted videos — place MP4 files in public/videos/
+   * Self-hosted MP4 files in public/videos/, or YouTube / Shorts URLs in `src`.
    * `product`: groups the gallery (all-exam-success | easy-match-bd). Subsection titles come from i18n.
    */
   videos: {
@@ -44,7 +44,7 @@ export const brand = {
       },
       {
         product: 'easy-match-bd' as const,
-        src: '',
+        src: 'https://youtube.com/shorts/w7m6o_7Acu4',
         poster: '',
         title: 'EasyMatch BD — How it works',
       },
@@ -89,13 +89,13 @@ export const brand = {
 
   /** Replace with your real contact information */
   contact: {
-    email: 'info@nextgenlearning.bd',
-    demoEmail: 'demo@nextgenlearning.bd',
+    email: 'info@nextgenlearningbd.com',
+    demoEmail: 'demo@nextgenlearningbd.com',
     phone: '+8801700000000',
     phoneDisplay: '+880 1700-000000',
     whatsapp: '8801700000000',
-    addressLine1: 'Banani, Dhaka 1213',
-    addressLine2: 'Bangladesh',
+    addressLine1: 'Razia Tower, Flat: F-19, Plot No: 6/A/1 Navana Garden Road, South Kallyanpur',
+    addressLine2: 'Dhaka-1207, Bangladesh',
     hours: 'Sun–Thu, 9:00 AM – 6:00 PM (BST)',
   },
 } as const

@@ -19,6 +19,24 @@ function hasSrc(src: string) {
   return Boolean(src?.trim())
 }
 
+function youtubeVideoId(src: string): string | null {
+  const patterns = [
+    /youtube\.com\/shorts\/([^/?&]+)/i,
+    /youtube\.com\/watch\?v=([^&]+)/i,
+    /youtu\.be\/([^/?&]+)/i,
+    /youtube\.com\/embed\/([^/?&]+)/i,
+  ]
+  for (const pattern of patterns) {
+    const match = src.match(pattern)
+    if (match?.[1]) return match[1]
+  }
+  return null
+}
+
+function isYoutubeShort(src: string) {
+  return /youtube\.com\/shorts\//i.test(src)
+}
+
 type SiteVideoProps = {
   entry: Pick<VideoEntry, 'src' | 'poster' | 'title'>
   className?: string
@@ -27,9 +45,27 @@ type SiteVideoProps = {
 
 function SiteVideo({ entry, className = '', large = false }: SiteVideoProps) {
   const [missing, setMissing] = useState(false)
+  const youtubeId = youtubeVideoId(entry.src)
 
   if (!hasSrc(entry.src)) {
     return <VideoPlaceholder title={entry.title} className={className} />
+  }
+
+  if (youtubeId) {
+    return (
+      <div
+        className={`overflow-hidden rounded-2xl bg-slate-900 shadow-inner ${large ? 'rounded-t-3xl rounded-b-none' : ''} ${className}`}
+      >
+        <iframe
+          className="h-full w-full"
+          src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+          title={entry.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        />
+      </div>
+    )
   }
 
   if (missing) {
@@ -94,7 +130,7 @@ function gallerySectionLabel(t: ReturnType<typeof useLanguage>['t'], product: Ga
 function pillClass(product: GalleryProduct) {
   return product === 'all-exam-success'
     ? 'bg-brand-100 text-brand-700'
-    : 'bg-rose-100 text-rose-800'
+    : 'bg-easymatch-100 text-easymatch-800'
 }
 
 export function Videos() {
@@ -151,7 +187,13 @@ export function Videos() {
                     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                       {items.map((item) => (
                         <li key={item.title} className="flex flex-col gap-3">
-                          <div className="aspect-video">
+                          <div
+                            className={
+                              isYoutubeShort(item.src)
+                                ? 'mx-auto aspect-[9/16] w-full max-w-[280px]'
+                                : 'aspect-video'
+                            }
+                          >
                             <SiteVideo entry={item} className="h-full" />
                           </div>
                           <div>

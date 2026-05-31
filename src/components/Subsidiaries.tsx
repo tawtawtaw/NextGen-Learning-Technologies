@@ -52,12 +52,12 @@ export function Subsidiaries() {
                     className={`border-b border-slate-100 p-8 lg:border-b-0 lg:border-r lg:p-10 ${
                       isAes
                         ? 'bg-gradient-to-br from-amber-50 via-white to-brand-50'
-                        : 'bg-gradient-to-br from-rose-50 via-white to-slate-50'
+                        : 'bg-gradient-to-br from-easymatch-50 via-white to-slate-50'
                     }`}
                   >
                     <p className="inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-800 shadow-sm ring-1 ring-slate-200/80">
                       <span
-                        className={`h-1.5 w-1.5 rounded-full ${isAes ? 'bg-brand-600' : 'bg-rose-500'}`}
+                        className={`h-1.5 w-1.5 rounded-full ${isAes ? 'bg-brand-600' : 'bg-easymatch-600'}`}
                       />
                       <span className="text-slate-600">{badgeLabel(t, sub.id)}</span>
                       <span className="text-slate-300">·</span>
@@ -84,7 +84,7 @@ export function Subsidiaries() {
                       )}
                       <div className="min-w-0">
                         <h3 className="text-2xl font-bold text-slate-900 sm:text-3xl">{copy.name}</h3>
-                        <p className={`mt-1 text-sm font-medium ${isAes ? 'text-brand-700' : 'text-rose-700'}`}>
+                        <p className={`mt-1 text-sm font-medium ${isAes ? 'text-brand-700' : 'text-easymatch-700'}`}>
                           {copy.tagline}
                         </p>
                       </div>
@@ -96,7 +96,7 @@ export function Subsidiaries() {
                       {copy.highlights.map((item) => (
                         <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
                           <svg
-                            className={`mt-0.5 h-4 w-4 shrink-0 ${isAes ? 'text-brand-600' : 'text-rose-600'}`}
+                            className={`mt-0.5 h-4 w-4 shrink-0 ${isAes ? 'text-brand-600' : 'text-easymatch-600'}`}
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -124,22 +124,18 @@ export function Subsidiaries() {
                       className={`group flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 transition ${
                         isAes
                           ? 'hover:border-brand-200 hover:bg-brand-50/50'
-                          : 'hover:border-rose-200 hover:bg-rose-50/50'
+                          : 'hover:border-easymatch-200 hover:bg-easymatch-50/50'
                       }`}
                     >
-                      <span
-                        className={`flex h-10 w-10 items-center justify-center rounded-xl text-white ${
-                          isAes ? 'bg-brand-600' : 'bg-rose-600'
-                        }`}
-                      >
-                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"
-                          />
-                        </svg>
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1 ring-1 ring-slate-200">
+                        <img
+                          src={isAes ? aesLogoUrl : easymatchLogoUrl}
+                          alt=""
+                          className="max-h-full max-w-full object-contain"
+                          width={44}
+                          height={44}
+                          aria-hidden
+                        />
                       </span>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -200,7 +196,7 @@ export function Subsidiaries() {
                     {helpline ? (
                       <a
                         href={`tel:${helpline.replace(/\s/g, '')}`}
-                        className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-rose-200 hover:bg-rose-50/50"
+                        className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-easymatch-200 hover:bg-easymatch-50/50"
                       >
                         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-800 text-white">
                           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
@@ -250,7 +246,7 @@ export function Subsidiaries() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`inline-flex flex-1 items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white transition sm:flex-none ${
-                          isAes ? 'bg-brand-600 hover:bg-brand-700' : 'bg-rose-600 hover:bg-rose-700'
+                          isAes ? 'bg-brand-600 hover:bg-brand-700' : 'bg-easymatch-600 hover:bg-easymatch-700'
                         }`}
                       >
                         {t.subsidiaries.visitWeb}

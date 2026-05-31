@@ -11,6 +11,14 @@
   --color-brand-900: #134e4a;
   --color-accent-400: #fbbf24;
   --color-accent-500: #f59e0b;
+  /* EasyMatch BD — deep maroon to match logo */
+  --color-easymatch-50: #faf6f7;
+  --color-easymatch-100: #f0e4e8;
+  --color-easymatch-200: #e2ccd4;
+  --color-easymatch-500: #9e3050;
+  --color-easymatch-600: #861337;
+  --color-easymatch-700: #6f0f2c;
+  --color-easymatch-800: #5a0c24;
 }
 
 html {
