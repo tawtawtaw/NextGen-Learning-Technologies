@@ -37,33 +37,50 @@ function isYoutubeShort(src: string) {
   return /youtube\.com\/shorts\//i.test(src)
 }
 
+const shellClass = (large: boolean, className: string) =>
+  `overflow-hidden rounded-2xl bg-slate-900 shadow-inner ${large ? 'rounded-t-3xl rounded-b-none' : ''} ${className}`
+
 type SiteVideoProps = {
   entry: Pick<VideoEntry, 'src' | 'poster' | 'title'>
   className?: string
   large?: boolean
+  gallery?: boolean
 }
 
-function SiteVideo({ entry, className = '', large = false }: SiteVideoProps) {
+function SiteVideo({ entry, className = '', large = false, gallery = false }: SiteVideoProps) {
   const [missing, setMissing] = useState(false)
   const youtubeId = youtubeVideoId(entry.src)
+  const youtubeShort = Boolean(youtubeId && isYoutubeShort(entry.src))
 
   if (!hasSrc(entry.src)) {
-    return <VideoPlaceholder title={entry.title} className={className} />
+    return <VideoPlaceholder title={entry.title} className={className} gallery={gallery} />
   }
 
   if (youtubeId) {
     return (
-      <div
-        className={`overflow-hidden rounded-2xl bg-slate-900 shadow-inner ${large ? 'rounded-t-3xl rounded-b-none' : ''} ${className}`}
-      >
-        <iframe
-          className="h-full w-full"
-          src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
-          title={entry.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          allowFullScreen
-        />
+      <div className={shellClass(large, className)}>
+        {gallery && youtubeShort ? (
+          <div className="flex h-full items-center justify-center">
+            <iframe
+              className="h-full w-auto max-w-full"
+              style={{ aspectRatio: '9 / 16' }}
+              src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+              title={entry.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        ) : (
+          <iframe
+            className="h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+            title={entry.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        )}
       </div>
     )
   }
@@ -74,14 +91,13 @@ function SiteVideo({ entry, className = '', large = false }: SiteVideoProps) {
         title={entry.title}
         hint={`File not found: ${entry.src}`}
         className={className}
+        gallery={gallery}
       />
     )
   }
 
   return (
-    <div
-      className={`overflow-hidden rounded-2xl bg-slate-900 shadow-inner ${large ? 'rounded-t-3xl rounded-b-none' : ''} ${className}`}
-    >
+    <div className={shellClass(large, className)}>
       <video
         className="h-full w-full object-contain"
         controls
@@ -97,12 +113,14 @@ function SiteVideo({ entry, className = '', large = false }: SiteVideoProps) {
   )
 }
 
-type PlaceholderProps = { title: string; hint?: string; className?: string }
+type PlaceholderProps = { title: string; hint?: string; className?: string; gallery?: boolean }
 
-function VideoPlaceholder({ title, hint, className = '' }: PlaceholderProps) {
+function VideoPlaceholder({ title, hint, className = '', gallery = false }: PlaceholderProps) {
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-4 text-center ${className}`}
+      className={`flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 px-4 text-center ${
+        gallery ? 'h-full min-h-0' : ''
+      } ${className}`}
     >
       <span className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-200 text-slate-400">
         <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
@@ -131,6 +149,20 @@ function pillClass(product: GalleryProduct) {
   return product === 'all-exam-success'
     ? 'bg-brand-100 text-brand-700'
     : 'bg-easymatch-100 text-easymatch-800'
+}
+
+function galleryGridClass(product: GalleryProduct) {
+  if (product === 'easy-match-bd') {
+    return 'grid gap-6 sm:grid-cols-2 lg:max-w-3xl'
+  }
+  return 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3'
+}
+
+function galleryFrameClass(product: GalleryProduct) {
+  if (product === 'easy-match-bd') {
+    return 'h-72 w-full sm:h-80'
+  }
+  return 'aspect-video w-full'
 }
 
 export function Videos() {
@@ -184,17 +216,11 @@ export function Videos() {
                     <h3 className="mb-4 text-lg font-bold text-slate-900">
                       {gallerySectionLabel(t, product)}
                     </h3>
-                    <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <ul className={galleryGridClass(product)}>
                       {items.map((item) => (
                         <li key={item.title} className="flex flex-col gap-3">
-                          <div
-                            className={
-                              isYoutubeShort(item.src)
-                                ? 'mx-auto aspect-[9/16] w-full max-w-[280px]'
-                                : 'aspect-video'
-                            }
-                          >
-                            <SiteVideo entry={item} className="h-full" />
+                          <div className={galleryFrameClass(product)}>
+                            <SiteVideo entry={item} className="h-full w-full" gallery />
                           </div>
                           <div>
                             <span
