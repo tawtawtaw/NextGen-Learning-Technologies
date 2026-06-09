@@ -11,4 +11,4 @@ endpoints:
   - name: nextgen
     url: https://nextgen.ngrok-free.dev
     upstream:
-      url: http://localhost:5175
+      url: http://localhost:5173

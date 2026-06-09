@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { brand } from '../brand'
 import { useLanguage } from '../i18n/LanguageContext'
 
@@ -40,6 +40,125 @@ function isYoutubeShort(src: string) {
 const shellClass = (large: boolean, className: string) =>
   `overflow-hidden rounded-2xl bg-slate-900 shadow-inner ${large ? 'rounded-t-3xl rounded-b-none' : ''} ${className}`
 
+function youtubeEmbedSrc(videoId: string, autoplay = false) {
+  const params = new URLSearchParams({
+    modestbranding: '1',
+    rel: '0',
+    playsinline: '1',
+    iv_load_policy: '3',
+    fs: '1',
+  })
+  if (autoplay) params.set('autoplay', '1')
+  return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`
+}
+
+const iframeAllow =
+  'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen'
+
+type YoutubePlayerProps = {
+  videoId: string
+  title: string
+  short: boolean
+  className?: string
+  centeredShort?: boolean
+  clickToPlay?: boolean
+}
+
+function YoutubePlayer({
+  videoId,
+  title,
+  short,
+  className = '',
+  centeredShort = false,
+  clickToPlay = false,
+}: YoutubePlayerProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [playing, setPlaying] = useState(!clickToPlay)
+  const [thumbSrc, setThumbSrc] = useState(
+    short
+      ? `https://i.ytimg.com/vi/${videoId}/oardefault.jpg`
+      : `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+  )
+
+  async function enterFullscreen() {
+    const el = containerRef.current
+    if (!el) return
+    try {
+      await el.requestFullscreen()
+    } catch {
+      // Browser blocked or unsupported — YouTube controls remain available.
+    }
+  }
+
+  if (playing) {
+    return (
+      <div
+        ref={containerRef}
+        className={`relative h-full w-full ${shellClass(false, className)} [&:fullscreen]:!h-screen [&:fullscreen]:!w-screen [&:fullscreen]:!max-w-none [&:fullscreen]:rounded-none`}
+      >
+        <iframe
+          className="h-full w-full"
+          src={youtubeEmbedSrc(videoId, clickToPlay && playing)}
+          title={title}
+          allow={iframeAllow}
+          referrerPolicy="strict-origin-when-cross-origin"
+          allowFullScreen
+        />
+        <button
+          type="button"
+          onClick={enterFullscreen}
+          className="absolute top-2 right-2 z-10 flex h-9 w-9 items-center justify-center rounded-lg bg-black/60 text-white transition hover:bg-black/80"
+          aria-label={`Fullscreen: ${title}`}
+        >
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+            />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => setPlaying(true)}
+      className={`group relative block h-full w-full cursor-pointer border-0 p-0 text-left ${shellClass(false, className)}`}
+      aria-label={`Play video: ${title}`}
+    >
+      {centeredShort && short ? (
+        <span className="flex h-full items-center justify-center">
+          <img
+            src={thumbSrc}
+            alt=""
+            className="h-full w-auto max-w-full object-cover"
+            style={{ aspectRatio: '9 / 16' }}
+            onError={() => setThumbSrc(`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`)}
+          />
+        </span>
+      ) : (
+        <img
+          src={thumbSrc}
+          alt=""
+          className="h-full w-full object-cover"
+          onError={() => setThumbSrc(`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`)}
+        />
+      )}
+      <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/20 transition group-hover:bg-black/35">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-slate-900 shadow-lg">
+          <svg className="ml-1 h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </span>
+      </span>
+    </button>
+  )
+}
+
 type SiteVideoProps = {
   entry: Pick<VideoEntry, 'src' | 'poster' | 'title'>
   className?: string
@@ -58,30 +177,14 @@ function SiteVideo({ entry, className = '', large = false, gallery = false }: Si
 
   if (youtubeId) {
     return (
-      <div className={shellClass(large, className)}>
-        {gallery && youtubeShort ? (
-          <div className="flex h-full items-center justify-center">
-            <iframe
-              className="h-full w-auto max-w-full"
-              style={{ aspectRatio: '9 / 16' }}
-              src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
-              title={entry.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
-          </div>
-        ) : (
-          <iframe
-            className="h-full w-full"
-            src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
-            title={entry.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          />
-        )}
-      </div>
+      <YoutubePlayer
+        videoId={youtubeId}
+        title={entry.title}
+        short={youtubeShort}
+        className={className}
+        centeredShort={gallery && youtubeShort}
+        clickToPlay={gallery}
+      />
     )
   }
 
@@ -151,17 +254,11 @@ function pillClass(product: GalleryProduct) {
     : 'bg-easymatch-100 text-easymatch-800'
 }
 
-function galleryGridClass(product: GalleryProduct) {
-  if (product === 'easy-match-bd') {
-    return 'grid gap-6 sm:grid-cols-2 lg:max-w-3xl'
-  }
+function galleryGridClass() {
   return 'grid gap-6 sm:grid-cols-2 lg:grid-cols-3'
 }
 
-function galleryFrameClass(product: GalleryProduct) {
-  if (product === 'easy-match-bd') {
-    return 'h-72 w-full sm:h-80'
-  }
+function galleryFrameClass() {
   return 'aspect-video w-full'
 }
 
@@ -216,10 +313,10 @@ export function Videos() {
                     <h3 className="mb-4 text-lg font-bold text-slate-900">
                       {gallerySectionLabel(t, product)}
                     </h3>
-                    <ul className={galleryGridClass(product)}>
+                    <ul className={galleryGridClass()}>
                       {items.map((item) => (
                         <li key={item.title} className="flex flex-col gap-3">
-                          <div className={galleryFrameClass(product)}>
+                          <div className={galleryFrameClass()}>
                             <SiteVideo entry={item} className="h-full w-full" gallery />
                           </div>
                           <div>

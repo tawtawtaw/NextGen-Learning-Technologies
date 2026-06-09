@@ -12,6 +12,27 @@ export const brand = {
   description:
     'NextGen Learning Technologies is a licensed IT-enabled services and Educational Consultancy company developing smart digital platforms for education, career preparation, software services and social-impact solutions.',
 
+  links: {
+    partnerForm: 'https://forms.gle/3KgvT65kpkB3EvYs7',
+    aesYoutube: 'https://www.youtube.com/@allexamsuccessbd',
+  },
+
+  /** Homepage slider — banners in public/slides/slide-1.png … slide-5.png */
+  heroSlides: [
+    { image: '/slides/slide-1.png', gradient: 'from-brand-900 via-brand-800 to-brand-700' },
+    { image: '/slides/slide-2.png', gradient: 'from-amber-900 via-brand-800 to-brand-900' },
+    { image: '/slides/slide-3.png', gradient: 'from-slate-900 via-brand-900 to-brand-800' },
+    { image: '/slides/slide-4.png', gradient: 'from-brand-800 via-teal-900 to-brand-900' },
+    { image: '/slides/slide-5.png', gradient: 'from-easymatch-800 via-brand-900 to-slate-900' },
+  ],
+
+  consultingImages: {
+    studyAbroad: '/images/consulting/study-abroad.png',
+    admissionCounselling: '/images/consulting/admission-counselling.png',
+    ieltsScholarship: '/images/consulting/ielts-scholarship.png',
+    universityConnection: '/images/consulting/university-connection.png',
+  },
+
   /**
    * Self-hosted MP4 files in public/videos/, or YouTube / Shorts URLs in `src`.
    * `product`: groups the gallery (all-exam-success | easy-match-bd). Subsection titles come from i18n.
@@ -56,7 +77,7 @@ export const brand = {
       },
       {
         product: 'easy-match-bd' as const,
-        src: '',
+        src: '/videos/em-premium-packages.mp4',
         poster: '',
         title: 'EasyMatch BD — Premium packages',
       },
@@ -73,7 +94,7 @@ export const brand = {
       appStoreUrl: '',
       helpline: '',
       facebookUrl: 'https://www.facebook.com/allexamsuccessbd/',
-      youtubeUrl: '',
+      youtubeUrl: 'https://www.youtube.com/@allexamsuccessbd',
     },
     {
       id: 'easy-match-bd',
@@ -91,9 +112,9 @@ export const brand = {
   contact: {
     email: 'info@nextgenlearningbd.com',
     demoEmail: 'demo@nextgenlearningbd.com',
-    phone: '+8801700000000',
-    phoneDisplay: '+880 1700-000000',
-    whatsapp: '8801700000000',
+    phone: '+8801730321717',
+    phoneDisplay: '+880 1730-321717',
+    whatsapp: '8801730321717',
     addressLine1: 'Razia Tower, Flat: F-19, Plot No: 6/A/1 Navana Garden Road, South Kallyanpur',
     addressLine2: 'Dhaka-1207, Bangladesh',
     hours: 'Sun–Thu, 9:00 AM – 6:00 PM (BST)',

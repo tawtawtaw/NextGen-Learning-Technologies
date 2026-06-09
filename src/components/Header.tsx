@@ -9,10 +9,12 @@ export function Header() {
 
   const navLinks = [
     { href: '#positioning', label: t.nav.about },
-    { href: '#subsidiaries', label: t.nav.platforms },
+    { href: '#all-exam-success', label: t.nav.aes },
     { href: '#solutions', label: t.nav.solutions },
-    { href: '#videos', label: t.nav.videos },
-    { href: '#why-us', label: t.nav.whyUs },
+    { href: '#study-abroad', label: t.nav.studyAbroad },
+    { href: '#leadership', label: t.nav.leadership },
+    { href: '#subsidiaries', label: t.nav.platforms },
+    { href: '#news', label: t.nav.news },
     { href: '#contact', label: t.nav.contact },
   ]
 
@@ -23,7 +25,7 @@ export function Header() {
           <Logo />
         </a>
 
-        <nav className="hidden items-center gap-6 lg:flex xl:gap-8">
+        <nav className="hidden items-center gap-5 lg:flex xl:gap-6">
           {navLinks.map((link) => (
             <a
               key={link.href}
@@ -34,6 +36,14 @@ export function Header() {
             </a>
           ))}
           <LanguageToggle />
+          <a
+            href="https://allexamsuccess.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-brand-300 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 transition hover:bg-brand-100"
+          >
+            {t.nav.exploreAes}
+          </a>
           <a
             href="#contact"
             className="rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
@@ -78,8 +88,19 @@ export function Header() {
             ))}
             <li>
               <a
+                href="https://allexamsuccess.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 block rounded-full border border-brand-300 bg-brand-50 px-5 py-2.5 text-center text-sm font-semibold text-brand-700"
+                onClick={() => setOpen(false)}
+              >
+                {t.nav.exploreAes}
+              </a>
+            </li>
+            <li>
+              <a
                 href="#contact"
-                className="mt-2 block rounded-full bg-brand-600 px-5 py-2.5 text-center text-sm font-semibold text-white"
+                className="block rounded-full bg-brand-600 px-5 py-2.5 text-center text-sm font-semibold text-white"
                 onClick={() => setOpen(false)}
               >
                 {t.nav.cta}
